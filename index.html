@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Rate Kinkob Kreations</title>
 
-  <!-- Font Awesome for social media icons -->
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
@@ -62,7 +62,7 @@
       display: flex;
       justify-content: center;
       gap: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
 
     .star {
@@ -70,13 +70,12 @@
       cursor: pointer;
       color: transparent;
       -webkit-text-stroke: 1.5px #ffb400;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
     }
 
     .star.filled {
       color: #ffb400;
-      -webkit-text-stroke: 1.5px #ffb400;
-      transform: scale(1.2);
+      transform: scale(1.15);
     }
 
     .sub {
@@ -85,12 +84,34 @@
       margin-bottom: 15px;
     }
 
-    /* Social icons section */
+    /* Submit button */
+    .submit-btn {
+      background: #ffb400;
+      color: #001f3f;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 25px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .submit-btn:hover {
+      background: #e0a200;
+    }
+
+    .submit-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* Social icons */
     .social-icons {
       display: flex;
       justify-content: center;
-      gap: 20px;
-      margin-top: 15px;
+      gap: 18px;
+      margin-top: 18px;
     }
 
     .social-icons a {
@@ -107,11 +128,15 @@
 
 <body>
   <div class="card">
-    <!-- Logo -->
     <img src="https://i.ibb.co/bjdZBy8z/Hotel-Logo-25.png" class="logo" alt="Kinkob Kreations Logo">
-    <h1><img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" class="google" alt="Google Logo">Rate Us</h1>
+
+    <h1>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" class="google">
+      Rate Us
+    </h1>
+
     <p>Our Service and Product</p>
-    
+
     <div class="stars">
       <span class="star" data-value="1">★</span>
       <span class="star" data-value="2">★</span>
@@ -120,12 +145,13 @@
       <span class="star" data-value="5">★</span>
     </div>
 
-    <div class="sub">Your feedback helps us improve every day.</div>
+    <div class="sub">Please select rating, then submit</div>
 
-    <!-- Social Media Icons -->
+    <button class="submit-btn" id="submitBtn" disabled>Submit Rating</button>
+
     <div class="social-icons">
       <a href="https://www.facebook.com/KinkobKreations" target="_blank"><i class="fab fa-facebook"></i></a>
-      <a href="https://www.instagram.com/kinkobkreationsofficial?igsh=cXhkNDM4anBueTJs" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.instagram.com/kinkobkreationsofficial" target="_blank"><i class="fab fa-instagram"></i></a>
       <a href="https://www.linkedin.com/company/knkob-kreations/" target="_blank"><i class="fab fa-linkedin"></i></a>
       <a href="https://www.youtube.com/@kinkobkreations" target="_blank"><i class="fab fa-youtube"></i></a>
       <a href="https://www.kinkobkreations.com" target="_blank"><i class="fas fa-globe"></i></a>
@@ -133,28 +159,42 @@
   </div>
 
   <script>
-    // URLs
-    const GOOGLE_REVIEW_URL = "https://search.google.com/local/writereview?placeid=ChIJ__H40ZHA1DsRuttOMA30ZAc";
-    const FEEDBACK_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdAVc_T-60P-Vuj5AFvleyz7cvKWGVmu6FrGZb4CMaqvz1oqQ/viewform?usp=dialog";
+    const GOOGLE_REVIEW_URL =
+      "https://search.google.com/local/writereview?placeid=ChIJ__H40ZHA1DsRuttOMA30ZAc";
 
-    // Rating logic
-    const stars = document.querySelectorAll('.star');
+    const FEEDBACK_FORM_URL =
+      "https://docs.google.com/forms/d/e/1FAIpQLSdAVc_T-60P-Vuj5AFvleyz7cvKWGVmu6FrGZb4CMaqvz1oqQ/viewform";
+
+    const stars = document.querySelectorAll(".star");
+    const submitBtn = document.getElementById("submitBtn");
+
+    let selectedRating = 0;
+
+    // Star selection only
     stars.forEach(star => {
-      star.addEventListener('click', () => {
-        const rating = parseInt(star.dataset.value);
-        stars.forEach(s => s.classList.remove('filled'));
-        for (let i = 0; i < rating; i++) stars[i].classList.add('filled');
+      star.addEventListener("click", () => {
+        selectedRating = parseInt(star.dataset.value);
 
-        setTimeout(() => {
-          if (rating >= 4) {
-            window.location.href = GOOGLE_REVIEW_URL;
-          } else {
-            const url = FEEDBACK_FORM_URL + encodeURIComponent(rating);
-            window.location.href = url;
-          }
-        }, 400);
+        stars.forEach(s => s.classList.remove("filled"));
+        for (let i = 0; i < selectedRating; i++) {
+          stars[i].classList.add("filled");
+        }
+
+        submitBtn.disabled = false;
       });
+    });
+
+    // Submit logic
+    submitBtn.addEventListener("click", () => {
+      if (!selectedRating) return;
+
+      if (selectedRating >= 4) {
+        window.location.href = GOOGLE_REVIEW_URL;
+      } else {
+        window.location.href = FEEDBACK_FORM_URL;
+      }
     });
   </script>
 </body>
 </html>
+
